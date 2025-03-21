@@ -1,0 +1,118 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 32
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+kotlinOptions {
+    jvmTarget = '1.8'
+    useIR = true
+}
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.version.get()
+
+    }
+
+    hilt {
+        enableAggregatingTask = true
+    }
+    lintOptions {
+        //lint error caused by using late init var in tests
+        //https://github.com/google/dagger/issues/3201
+        disable "JvmStaticProvidesInObjectDetector", "FieldSiteTargetOnQualifierAnnotation", "ModuleCompanionObjects", "ModuleCompanionObjectsNotInModuleParent"
+    }
+}
+
+
+dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data:repository"))
+    api(project(":common-compose"))
+    api(project(":common"))
+
+    implementation libs.androidx.lifecycle.runtime
+
+
+
+
+    //compose
+   implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.androidx.compose.ui.core
+
+    implementation libs.androidx.lifecycle.viewModelCompose
+    debugImplementation libs.androidx.compose.ui.tooling
+    debugImplementation libs.androidx.compose.ui.testManifest
+    debugImplementation libs.androidx.compose.ui.util
+
+
+   // composetest
+    testImplementation libs.junit4
+    testImplementation libs.turbine
+    testApi(project(":core-testing"))
+    androidTestImplementation libs.androidx.test.espresso.core
+    androidTestImplementation libs.androidx.test.junitexp
+    androidTestImplementation libs.androidx.compose.ui.test
+
+    testApi libs.androidx.test.core
+    testApi libs.androidx.test.rules
+
+
+    //constraint
+    implementation libs.androidx.compose.constraintlayout
+
+    // Coroutines
+
+    // Coroutine Lifecycle Scopes
+   // implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+
+    //Dagger - Hilt
+    implementation libs.dagger.hilt.android
+    kapt libs.dagger.hilt.compiler
+    implementation libs.androidx.hilt.viewmodel
+
+    kapt libs.androidx.hilt.compiler
+    implementation libs.androidx.hilt.compose
+
+    //paging
+    implementation libs.androidx.paging.runtime
+    implementation libs.androidx.paging.compose
+
+
+
+}

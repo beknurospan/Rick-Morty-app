@@ -1,0 +1,27 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath libs.android.gradlePlugin
+        classpath libs.kotlin.gradlePlugin
+        classpath libs.kotlin.serializationPlugin
+
+        classpath libs.dagger.hilt.gradlePlugin
+
+
+
+        //https://youtrack.jetbrains.com/issue/IDEA-279603/Code-completion-for-Gradle-Version-Catalogs-in-groovy-build-files
+        classpath files(libs.class.superclass.protectionDomain.codeSource.location)
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
